@@ -1,5 +1,5 @@
-i = 1
-20.times do
+# i = 1 ブロック引数だと、不要になる。
+20.times do |j| i = j + 1   # |j|以降を追加。0スタートなので+1した。
   if (i % (3 * 5)) == 0
     puts "FizzBuzz"
   elsif (i % 3) == 0
@@ -9,5 +9,5 @@ i = 1
   else
     puts i
   end
-  i += 1
+  # i += 1 ブロック引数だと、不要になる。
 end
