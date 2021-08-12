@@ -25,7 +25,7 @@ else
   return
 end
 
-puts "      " + "#{month}" + "月 " + "#{year}"
+puts "      #{month}月 #{year}"
 puts "日 月 火 水 木 金 土"
 
 first_wday = Date.new(year, month, 1).wday
