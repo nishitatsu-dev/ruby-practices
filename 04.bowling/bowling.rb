@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 class Score
   def self.count_score(result)
-    self.new.count_score(result)
+    new.count_score(result)
   end
 
   def count_score(result)
@@ -47,4 +48,4 @@ class Score
   end
 end
 
-__FILE__ == $0 && Score.count_score(*ARGV)
+__FILE__ == $PROGRAM_NAME && Score.count_score(*ARGV)
