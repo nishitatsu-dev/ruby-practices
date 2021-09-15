@@ -1,8 +1,9 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
 
 class ListSegment
   def self.list_segment(path_and_option)
-    self.new.list_segment(path_and_option)
+    new.list_segment(path_and_option)
   end
 
   def list_segment(path_and_option)
@@ -54,4 +55,4 @@ class ListSegment
   end
 end
 
-__FILE__ == $0 && ListSegment.list_segment(ARGV)
+__FILE__ == $PROGRAM_NAME && ListSegment.list_segment(ARGV)
