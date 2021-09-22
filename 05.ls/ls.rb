@@ -10,12 +10,12 @@ class ListSegment
     options = path_and_option.grep(/-/)
     paths = path_and_option - options
 
-    if paths == []
-      lists = Dir.glob('*')
-    elsif File.exist?(paths[0])
+    unless paths.empty?
+      raise ArgumentError, "無効なパスです:#{paths[0]}" unless File.exist?(paths[0])
+
       Dir.chdir(paths[0])
-      lists = Dir.glob('*')
     end
+    lists = Dir.glob('*')
     arrange_form(lists)
   end
 
