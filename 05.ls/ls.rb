@@ -19,26 +19,20 @@ class ListSegment
     arrange_form(lists)
   end
 
+  LINE = 3
   def arrange_form(lists)
-    line = 3
-    residue = lists.size % line
+    residue = lists.size % LINE
     number_of_dummy = if residue.zero?
                         0
                       else
-                        line - residue
+                        LINE - residue
                       end
     lists_with_dummy = adjust_word_length(lists) + Array.new(number_of_dummy, '')
-    row = lists_with_dummy.size / line
+    row = lists_with_dummy.size / LINE
     lists_2dimension = []
-    line.times do |n|
-      from = row * n
-      to = row * (n + 1) - 1
-      lists_2dimension << lists_with_dummy[from..to]
-    end
+    lists_with_dummy.each_slice(row) { |n| lists_2dimension << n }
     lists_2d_transposed = lists_2dimension.transpose
-    row.times do |n|
-      puts lists_2d_transposed[n].join
-    end
+    lists_2d_transposed.each { |n| puts n.join }
   end
 
   def adjust_word_length(lists)
