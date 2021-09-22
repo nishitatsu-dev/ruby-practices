@@ -12,18 +12,11 @@ class ListSegment
 
     if paths == []
       lists = Dir.glob('*')
-      arrange_form(lists)
-    elsif Dir.exist?(paths[0])
+    elsif File.exist?(paths[0])
       Dir.chdir(paths[0])
       lists = Dir.glob('*')
-      arrange_form(lists)
-    else
-      begin
-        Dir.chdir(paths[0])
-      rescue Errno::ENOENT => e
-        puts e.message.to_s
-      end
     end
+    arrange_form(lists)
   end
 
   def arrange_form(lists)
