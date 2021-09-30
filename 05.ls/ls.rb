@@ -1,22 +1,25 @@
 #! /usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
 class ListSegment
-  def self.list_segment(path_and_option)
-    new.list_segment(path_and_option)
+  def self.list_segment(paths, options)
+    new.list_segment(paths, options)
   end
 
-  def list_segment(path_and_option)
-    options = path_and_option.grep(/-/)
-    paths = path_and_option - options
-
+  def list_segment(paths, options)
     unless paths.empty?
       raise ArgumentError, "無効なパスです:#{paths[0]}" unless File.exist?(paths[0])
 
       Dir.chdir(paths[0])
     end
-    lists = Dir.glob('*')
+    lists = Dir.glob(*apply_a(options))
     arrange_form(lists)
+  end
+
+  def apply_a(options)
+    options[:a] ? ['*', File::FNM_DOTMATCH] : ['*']
   end
 
   LINE = 3
@@ -42,4 +45,11 @@ class ListSegment
   end
 end
 
-__FILE__ == $PROGRAM_NAME && ListSegment.list_segment(ARGV)
+if __FILE__ == $PROGRAM_NAME
+  options = {}
+  ARGV.options do |opt|
+    opt.on('-a', '全てのファイルとフォルダを表示（ドット(.)で始まるものを含む）') { |x| options[:a] = x }
+    opt.parse!(ARGV)
+  end
+  ListSegment.list_segment(ARGV, options)
+end
