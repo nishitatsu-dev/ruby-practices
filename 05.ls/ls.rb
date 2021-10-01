@@ -15,11 +15,16 @@ class ListSegment
       Dir.chdir(paths[0])
     end
     lists = Dir.glob(*apply_a(options))
-    arrange_form(lists)
+    lists_ordered = apply_r(options, lists)
+    arrange_form(lists_ordered)
   end
 
   def apply_a(options)
     options[:a] ? ['*', File::FNM_DOTMATCH] : ['*']
+  end
+
+  def apply_r(options, lists)
+    options[:r] ? lists.reverse : lists
   end
 
   LINE = 3
@@ -49,6 +54,7 @@ if __FILE__ == $PROGRAM_NAME
   options = {}
   ARGV.options do |opt|
     opt.on('-a', '全てのファイルとフォルダを表示（ドット(.)で始まるものを含む）') { |x| options[:a] = x }
+    opt.on('-r', '逆順で表示') { |x| options[:r] = x }
     opt.parse!(ARGV)
   end
   ListSegment.list_segment(ARGV, options)
