@@ -82,9 +82,9 @@ class ListSegment
     if mode[-4] != '1'
       permission
     elsif permission[-1] == '-'
-      permission.chop << 't'
-    else # permission[-1] == 'x'
       permission.chop << 'T'
+    else # permission[-1] == 'x'
+      permission.chop << 't'
     end
   end
 
