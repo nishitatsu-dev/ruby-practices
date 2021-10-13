@@ -32,15 +32,15 @@ class ListSegment
     options[:l] ? apply_l(lists_ordered) : arrange_form(lists_ordered)
   end
 
+  FILE_MODE = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x', '0' => '---' }.freeze
   def apply_l(lists_ordered)
     calc_block_and_word_length(lists_ordered)
     puts "total #{@total_block}"
     lists_ordered.each do |file|
       fs = File.lstat(file)
       type = (fs.ftype[0] == 'f' ? '-' : fs.ftype[0])
-      file_mode = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x', '0' => '---' }
       mode = fs.mode.to_s(8)
-      permission = mode[-3, 3].chars.map { |n| file_mode[n] }.join
+      permission = mode[-3, 3].chars.map { |n| FILE_MODE[n] }.join
       permission_with_stickybit = modify_by_stikybit_condition(mode, permission)
       xattr = (condition_for_xattr(file, type, permission) ? '@' : ' ')
       link = fs.nlink.to_s.rjust(@full_length_of_link).insert(-1, ' ')
@@ -56,26 +56,24 @@ class ListSegment
   end
 
   def calc_block_and_word_length(lists_ordered)
-    blocks = []
-    lengths_of_link = []
-    lengths_of_user = []
-    lengths_of_group = []
-    lengths_of_size = []
-    lists_ordered.each do |n|
+    length_of_link = 0
+    length_of_user = 0
+    length_of_group = 0
+    length_of_size = 0
+    @total_block = lists_ordered.inject(0) do |sum, n|
       fs = File.lstat(n)
-      blocks << fs.blocks
-      lengths_of_link << fs.nlink.to_s.length
-      lengths_of_user << Etc.getpwuid(fs.uid).name.length
-      lengths_of_group << Etc.getgrgid(fs.gid).name.length
-      lengths_of_size << fs.size.to_s.length
+      length_of_link = [length_of_link, fs.nlink.to_s.length].max
+      length_of_user = [length_of_user, Etc.getpwuid(fs.uid).name.length].max
+      length_of_group = [length_of_group, Etc.getgrgid(fs.gid).name.length].max
+      length_of_size = [length_of_size, fs.size.to_s.length].max
+      sum + fs.blocks
     end
-    @total_block = blocks.sum
     margin1 = 1
     margin2 = 2
-    @full_length_of_link = margin1 + lengths_of_link.max
-    @full_length_of_user = margin2 + lengths_of_user.max
-    @full_length_of_group = margin1 + lengths_of_group.max
-    @full_length_of_size = margin1 + lengths_of_size.max
+    @full_length_of_link = margin1 + length_of_link
+    @full_length_of_user = margin2 + length_of_user
+    @full_length_of_group = margin1 + length_of_group
+    @full_length_of_size = margin1 + length_of_size
   end
 
   def modify_by_stikybit_condition(mode, permission)
