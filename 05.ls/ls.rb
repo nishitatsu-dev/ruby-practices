@@ -56,24 +56,21 @@ class ListSegment
   end
 
   def calc_block_and_word_length(lists_ordered)
-    length_of_link = 0
-    length_of_user = 0
-    length_of_group = 0
-    length_of_size = 0
+    lengths = { link: 0, user: 0, group: 0, size: 0 }
     @total_block = lists_ordered.inject(0) do |sum, n|
       fs = File.lstat(n)
-      length_of_link = [length_of_link, fs.nlink.to_s.length].max
-      length_of_user = [length_of_user, Etc.getpwuid(fs.uid).name.length].max
-      length_of_group = [length_of_group, Etc.getgrgid(fs.gid).name.length].max
-      length_of_size = [length_of_size, fs.size.to_s.length].max
+      lengths[:link] = [lengths[:link], fs.nlink.to_s.length].max
+      lengths[:user] = [lengths[:user], Etc.getpwuid(fs.uid).name.length].max
+      lengths[:group] = [lengths[:group], Etc.getgrgid(fs.gid).name.length].max
+      lengths[:size] = [lengths[:size], fs.size.to_s.length].max
       sum + fs.blocks
     end
     margin1 = 1
     margin2 = 2
-    @full_length_of_link = margin1 + length_of_link
-    @full_length_of_user = margin2 + length_of_user
-    @full_length_of_group = margin1 + length_of_group
-    @full_length_of_size = margin1 + length_of_size
+    @full_length_of_link = margin1 + lengths[:link]
+    @full_length_of_user = margin2 + lengths[:user]
+    @full_length_of_group = margin1 + lengths[:group]
+    @full_length_of_size = margin1 + lengths[:size]
   end
 
   def modify_by_stikybit_condition(mode, permission)
