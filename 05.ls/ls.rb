@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 class ListSegment
   def self.list_segment(paths, options)
@@ -16,7 +17,7 @@ class ListSegment
     end
     lists = Dir.glob(*apply_a(options))
     lists_ordered = apply_r(options, lists)
-    arrange_form(lists_ordered)
+    select_display_format(options, lists_ordered)
   end
 
   def apply_a(options)
@@ -25,6 +26,65 @@ class ListSegment
 
   def apply_r(options, lists)
     options[:r] ? lists.reverse : lists
+  end
+
+  def select_display_format(options, lists_ordered)
+    options[:l] ? apply_l(lists_ordered) : arrange_form(lists_ordered)
+  end
+
+  FILE_MODE = { '7' => 'rwx', '6' => 'rw-', '5' => 'r-x', '4' => 'r--', '3' => '-wx', '2' => '-w-', '1' => '--x', '0' => '---' }.freeze
+  def apply_l(lists_ordered)
+    calc_block_and_word_length(lists_ordered)
+    puts "total #{@total_block}"
+    lists_ordered.each do |file|
+      fs = File.lstat(file)
+      type = (fs.ftype[0] == 'f' ? '-' : fs.ftype[0])
+      mode = fs.mode.to_s(8)
+      permission = mode[-3, 3].chars.map { |n| FILE_MODE[n] }.join
+      permission_with_stickybit = modify_by_stikybit_condition(mode, permission)
+      xattr = (condition_for_xattr(file, type, permission) ? '@' : ' ')
+      link = fs.nlink.to_s.rjust(@full_length_of_link).insert(-1, ' ')
+      user = Etc.getpwuid(fs.uid).name.ljust(@full_length_of_user)
+      group = Etc.getgrgid(fs.gid).name.ljust(@full_length_of_group)
+      size = fs.size.to_s.rjust(@full_length_of_size)
+      month = fs.mtime.month.to_s.rjust(3)
+      day = fs.mtime.day.to_s.rjust(3)
+      time = fs.mtime.strftime('%R').rjust(6)
+      name = (fs.symlink? ? " #{file} -> #{File.readlink(file)}" : " #{file}")
+      puts(type + permission_with_stickybit + xattr + link + user + group + size + month + day + time + name)
+    end
+  end
+
+  def calc_block_and_word_length(lists_ordered)
+    lengths = { link: 0, user: 0, group: 0, size: 0 }
+    @total_block = lists_ordered.inject(0) do |sum, n|
+      fs = File.lstat(n)
+      lengths[:link] = [lengths[:link], fs.nlink.to_s.length].max
+      lengths[:user] = [lengths[:user], Etc.getpwuid(fs.uid).name.length].max
+      lengths[:group] = [lengths[:group], Etc.getgrgid(fs.gid).name.length].max
+      lengths[:size] = [lengths[:size], fs.size.to_s.length].max
+      sum + fs.blocks
+    end
+    margin1 = 1
+    margin2 = 2
+    @full_length_of_link = margin1 + lengths[:link]
+    @full_length_of_user = margin2 + lengths[:user]
+    @full_length_of_group = margin1 + lengths[:group]
+    @full_length_of_size = margin1 + lengths[:size]
+  end
+
+  def modify_by_stikybit_condition(mode, permission)
+    if mode[-4] != '1'
+      permission
+    elsif permission[-1] == '-'
+      permission.chop << 'T'
+    else # permission[-1] == 'x'
+      permission.chop << 't'
+    end
+  end
+
+  def condition_for_xattr(file, type, permission)
+    type != 'l' && permission != '---------' && `xattr #{file.gsub(/ /, '\ ')}` =~ /^com.apple/
   end
 
   LINE = 3
@@ -55,6 +115,7 @@ if __FILE__ == $PROGRAM_NAME
   ARGV.options do |opt|
     opt.on('-a', '全てのファイルとフォルダを表示（ドット(.)で始まるものを含む）') { |x| options[:a] = x }
     opt.on('-r', '逆順で表示') { |x| options[:r] = x }
+    opt.on('-l', '詳細情報を表示') { |x| options[:l] = x }
     opt.parse!(ARGV)
   end
   ListSegment.list_segment(ARGV, options)
