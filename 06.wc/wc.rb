@@ -11,21 +11,20 @@ class LineWordByte
     results = []
     case paths.size
     when 0
-      results << select_display_format(text, options, path: '').rstrip
+      results << select_display_format(text, options, path: '')[0]
     when 1
       path0 = paths[0]
-      text = File.read(path)
-      results << select_display_format(text, options, path: path0)
+      text = File.read(path0)
+      results << select_display_format(text, options, path: path0)[0]
     else
       counts = []
       paths.each do |n|
         text = File.read(n)
-        results << select_display_format(text, options, path: n)
-        counts << @counts
+        result, each_counts = select_display_format(text, options, path: n)
+        results << result
+        counts << each_counts
       end
-      sums = counts.transpose.map { |a| a.inject(:+) }
-      answer = sums.inject('') { |abc, a| abc + " #{a.to_s.rjust(LENGTH)}" }
-      results << "#{answer} total"
+      results << calc_total(counts)
     end
     results.join("\n")
   end
@@ -35,14 +34,22 @@ class LineWordByte
   end
 
   LENGTH = 7
+  def calc_total(counts)
+    sums = counts.transpose.map { |a| a.inject(:+) }
+    answer = sums.inject('') { |abc, a| abc + " #{a.to_s.rjust(LENGTH)}" }
+    "#{answer} total"
+  end
+
   def line_form(text, path)
-    @counts = [count_line(text)]
-    " #{@counts[0].to_s.rjust(LENGTH)}" + " #{path}"
+    each_counts = [count_line(text)]
+    result = " #{each_counts[0].to_s.rjust(LENGTH)}" + " #{path}"
+    [result, each_counts]
   end
 
   def arrange_form(text, path)
-    @counts = [count_line(text), count_word(text), count_byte(text)]
-    " #{@counts[0].to_s.rjust(LENGTH)} #{@counts[1].to_s.rjust(LENGTH)} #{@counts[2].to_s.rjust(LENGTH)}" + " #{path}"
+    each_counts = [count_line(text), count_word(text), count_byte(text)]
+    result = " #{each_counts[0].to_s.rjust(LENGTH)} #{each_counts[1].to_s.rjust(LENGTH)} #{each_counts[2].to_s.rjust(LENGTH)}" + " #{path}"
+    [result, each_counts]
   end
 
   def count_line(text)
