@@ -35,20 +35,20 @@ class LineWordByte
 
   LENGTH = 7
   def calc_total(counts)
-    sums = counts.transpose.map { |a| a.inject(:+) }
-    answer = sums.inject('') { |abc, a| abc + " #{a.to_s.rjust(LENGTH)}" }
+    sums = counts.transpose.map(&:sum)
+    answer = sums.inject('') { |abc, a| "#{abc} #{a.to_s.rjust(LENGTH)}" }
     "#{answer} total"
   end
 
   def line_form(text, path)
     each_counts = [count_line(text)]
-    result = " #{each_counts[0].to_s.rjust(LENGTH)}" + " #{path}"
+    result = " #{each_counts[0].to_s.rjust(LENGTH)} #{path}"
     [result, each_counts]
   end
 
   def arrange_form(text, path)
     each_counts = [count_line(text), count_word(text), count_byte(text)]
-    result = " #{each_counts[0].to_s.rjust(LENGTH)} #{each_counts[1].to_s.rjust(LENGTH)} #{each_counts[2].to_s.rjust(LENGTH)}" + " #{path}"
+    result = " #{each_counts[0].to_s.rjust(LENGTH)} #{each_counts[1].to_s.rjust(LENGTH)} #{each_counts[2].to_s.rjust(LENGTH)} #{path}"
     [result, each_counts]
   end
 
