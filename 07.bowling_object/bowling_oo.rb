@@ -11,7 +11,7 @@ class Game
   def self.score(argv)
     game = Game.new(argv)
     calc = ScoreByOldRule.new(game)
-    calc.total_score
+    p calc.total_score
   end
 
   def initialize(argv)
