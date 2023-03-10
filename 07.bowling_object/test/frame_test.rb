@@ -5,107 +5,45 @@ require_relative 'test_value'
 require_relative '../frame'
 
 # 目次
-# ①投球結果（X有り）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）１〜４__initialize
-# ②投球結果（数値のみ）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）１〜４__initialize
-# ③各フレームのボーナス種類を判定できる配列を返す１〜４__subtotal_each_frame
-# 注：
-# 「仮想10フレームまで」とは、「各フレーム２投ずつ合計20要素まで」のこと。
-# 10フレームでのボーナス投球は、「仮想11フレーム以降」に入ると考える。
+# ①投球結果（文字列）から、１ショット目（数値）を出力__first_shot
+# ②投球結果（文字列）から、ショット合計値（数値）を出力__score
+# ③投球結果（文字列）から、ストライクの場合:Xを出力する__mark
+# ④投球結果（文字列）から、スペアの場合:spareを出力する__mark
+# ⑤投球結果（文字列）から、ストライク・スペア以外の場合:noneを出力する__mark
 
 class FrameTest < Minitest::Test
-  def test_①投球結果（X有り）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）１__initialize
-    argv = TestValue.argv1
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_x1[0..19]
-    assert_equal frames, test_frame.frames_x_upto10
+  def test_①投球結果（文字列）から、１ショット目（数値）を出力__first_shot
+    first_shot = '1'
+    second_shot = '2'
+    frame = Frame.new(first_shot, second_shot)
+    assert_equal 1, frame.first_shot_score
   end
 
-  def test_①投球結果（X有り）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）２__initialize
-    argv = TestValue.argv2
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_x2[0..19]
-    assert_equal frames, test_frame.frames_x_upto10
+  def test_②投球結果（文字列）から、ショット合計値（数値）を出力__score
+    first_shot = '1'
+    second_shot = '2'
+    frame = Frame.new(first_shot, second_shot)
+    assert_equal 3, frame.score
   end
 
-  def test_①投球結果（X有り）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）３__initialize
-    argv = TestValue.argv3
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_x3[0..19]
-    assert_equal frames, test_frame.frames_x_upto10
+  def test_③投球結果（文字列）から、ストライクの場合：Xを出力する__mark
+    first_shot = 'X'
+    second_shot = 'dummy'
+    frame = Frame.new(first_shot, second_shot)
+    assert_equal :X, frame.mark
   end
 
-  def test_①投球結果（X有り）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）４__initialize
-    argv = TestValue.argv4
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_x4[0..19]
-    assert_equal frames, test_frame.frames_x_upto10
+  def test_④投球結果（文字列）から、スペアの場合：spareを出力する__mark
+    first_shot = '3'
+    second_shot = '7'
+    frame = Frame.new(first_shot, second_shot)
+    assert_equal :spare, frame.mark
   end
 
-  def test_②投球結果（数値のみ）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）１__initialize
-    argv = TestValue.argv1
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_i1[0..19]
-    assert_equal frames, test_frame.frames_i_upto10
-  end
-
-  def test_②投球結果（数値のみ）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）２__initialize
-    argv = TestValue.argv2
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_i2[0..19]
-    assert_equal frames, test_frame.frames_i_upto10
-  end
-
-  def test_②投球結果（数値のみ）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）３__initialize
-    argv = TestValue.argv3
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_i3[0..19]
-    assert_equal frames, test_frame.frames_i_upto10
-  end
-
-  def test_②投球結果（数値のみ）を分割（「仮想10フレームまで」と「仮想11フレーム以降」）４__initialize
-    argv = TestValue.argv4
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    frames = TestValue.frames_i4[0..19]
-    assert_equal frames, test_frame.frames_i_upto10
-  end
-
-  def test_③各フレームのボーナス種類を判定できる配列を返す１__subtotal_each_frame
-    argv = TestValue.argv1
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    subtotals = TestValue.subtotals_x1
-    assert_equal subtotals, test_frame.subtotal_each_frame
-  end
-
-  def test_③各フレームのボーナス種類を判定できる配列を返す２__subtotal_each_frame
-    argv = TestValue.argv2
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    subtotals = TestValue.subtotals_x2
-    assert_equal subtotals, test_frame.subtotal_each_frame
-  end
-
-  def test_③各フレームのボーナス種類を判定できる配列を返す３__subtotal_each_frame
-    argv = TestValue.argv3
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    subtotals = TestValue.subtotals_x3
-    assert_equal subtotals, test_frame.subtotal_each_frame
-  end
-
-  def test_③各フレームのボーナス種類を判定できる配列を返す４__subtotal_each_frame
-    argv = TestValue.argv4
-    shot = Shot.new(argv)
-    test_frame = Frame.new(shot)
-    subtotals = TestValue.subtotals_x4
-    assert_equal subtotals, test_frame.subtotal_each_frame
+  def test_⑤投球結果（文字列）から、ストライク・スペア以外の場合：noneを出力する__mark
+    first_shot = '3'
+    second_shot = '6'
+    frame = Frame.new(first_shot, second_shot)
+    assert_equal :none, frame.mark
   end
 end
