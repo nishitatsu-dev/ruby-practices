@@ -118,11 +118,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# 課題のテストファイル
-02.calendar/*
-04.bowling/*
-05.ls/*
-06.wc/*
-test/*
-# 07.bowling_object/test/*
