@@ -5,45 +5,51 @@ require_relative 'test_value'
 require_relative '../frame'
 
 # 目次
-# ①投球結果（文字列）から、１ショット目（数値）を出力__first_shot
-# ②投球結果（文字列）から、ショット合計値（数値）を出力__score
-# ③投球結果（文字列）から、ストライクの場合:Xを出力する__mark
-# ④投球結果（文字列）から、スペアの場合:spareを出力する__mark
-# ⑤投球結果（文字列）から、ストライク・スペア以外の場合:noneを出力する__mark
-
+# ①キーにフレーム番号、値にショットの配列を持つハッシュを生成１〜４__put_into_frames
+# NOTE - 「ショットの配列」の確認を「shot.markの配列」で代用
+# ②10フレームまでの投球結果（倒したピン数）合計を算出１〜４__calc_base_score
 class FrameTest < Minitest::Test
-  def test_①投球結果（文字列）から、１ショット目（数値）を出力__first_shot
-    first_shot = '1'
-    second_shot = '2'
-    frame = Frame.new(first_shot, second_shot)
-    assert_equal 1, frame.first_shot_score
+  def test_①キーにフレーム番号、値にショットの配列を持つハッシュを生成１__put_into_frames
+    frames = Frame.new(TestValue.results_offset1).frames
+    frames.each { |key, value| frames[key] = value.map(&:mark) }
+    assert_equal TestValue.frames_shots_s1, frames
   end
 
-  def test_②投球結果（文字列）から、ショット合計値（数値）を出力__score
-    first_shot = '1'
-    second_shot = '2'
-    frame = Frame.new(first_shot, second_shot)
-    assert_equal 3, frame.score
+  def test_①キーにフレーム番号、値にショットの配列を持つハッシュを生成２__put_into_frames
+    frames = Frame.new(TestValue.results_offset2).frames
+    frames.each { |key, value| frames[key] = value.map(&:mark) }
+    assert_equal TestValue.frames_shots_s2, frames
   end
 
-  def test_③投球結果（文字列）から、ストライクの場合：Xを出力する__mark
-    first_shot = 'X'
-    second_shot = 'dummy'
-    frame = Frame.new(first_shot, second_shot)
-    assert_equal :X, frame.mark
+  def test_①キーにフレーム番号、値にショットの配列を持つハッシュを生成３__put_into_frames
+    frames = Frame.new(TestValue.results_offset3).frames
+    frames.each { |key, value| frames[key] = value.map(&:mark) }
+    assert_equal TestValue.frames_shots_s3, frames
   end
 
-  def test_④投球結果（文字列）から、スペアの場合：spareを出力する__mark
-    first_shot = '3'
-    second_shot = '7'
-    frame = Frame.new(first_shot, second_shot)
-    assert_equal :spare, frame.mark
+  def test_①キーにフレーム番号、値にショットの配列を持つハッシュを生成４__put_into_frames
+    frames = Frame.new(TestValue.results_offset4).frames
+    frames.each { |key, value| frames[key] = value.map(&:mark) }
+    assert_equal TestValue.frames_shots_s4, frames
   end
 
-  def test_⑤投球結果（文字列）から、ストライク・スペア以外の場合：noneを出力する__mark
-    first_shot = '3'
-    second_shot = '6'
-    frame = Frame.new(first_shot, second_shot)
-    assert_equal :none, frame.mark
+  def test_②10フレームまでの投球結果（倒したピン数）合計を算出１__calc_base_score
+    frame = Frame.new(TestValue.results_offset1)
+    assert_equal TestValue.base_score1, frame.base_score
+  end
+
+  def test_②10フレームまでの投球結果（倒したピン数）合計を算出２__calc_base_score
+    frame = Frame.new(TestValue.results_offset2)
+    assert_equal TestValue.base_score2, frame.base_score
+  end
+
+  def test_②10フレームまでの投球結果（倒したピン数）合計を算出３__calc_base_score
+    frame = Frame.new(TestValue.results_offset3)
+    assert_equal TestValue.base_score3, frame.base_score
+  end
+
+  def test_②10フレームまでの投球結果（倒したピン数）合計を算出４__calc_base_score
+    frame = Frame.new(TestValue.results_offset4)
+    assert_equal TestValue.base_score4, frame.base_score
   end
 end

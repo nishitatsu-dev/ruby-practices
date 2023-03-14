@@ -8,7 +8,7 @@ class Shot
     @score = case shot
              when 'X'
                10
-             when 'dummy'
+             when nil
                0
              else
                shot.to_i

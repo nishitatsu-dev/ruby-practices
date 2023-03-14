@@ -3,20 +3,32 @@
 require_relative 'shot'
 
 class Frame
-  attr_reader :first_shot_score, :score, :mark
+  attr_reader :frames, :base_score
 
-  def initialize(first_shot, second_shot = nil)
-    first_shot = Shot.new(first_shot)
-    second_shot = Shot.new(second_shot)
-    @first_shot_score = first_shot.score
-    second_shot_score = second_shot.score
-    @score = @first_shot_score + second_shot_score
-    @mark = case first_shot.mark
-            when 'X'
-              :X
-            else
-              total = @first_shot_score + second_shot_score
-              @mark = total == 10 ? :spare : :none
-            end
+  def initialize(results_offset)
+    @results_offset = results_offset
+    put_into_frame
+    calc_base_score
+  end
+
+  private
+
+  def put_into_frame
+    @frames = {}
+    frame_names = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, :frame10_extra1, :frame10_extra2]
+    frame_length = @results_offset.length / 2
+    frame_length.times do |n|
+      first_shot = Shot.new(@results_offset[(2 * n)])
+      second_shot = Shot.new(@results_offset[(2 * n + 1)])
+      @frames[frame_names[n]] = [first_shot, second_shot]
+    end
+  end
+
+  def calc_base_score
+    @base_score = 0
+    10.times do |n|
+      f = n + 1
+      @base_score += @frames[f][0].score + @frames[f][1].score
+    end
   end
 end

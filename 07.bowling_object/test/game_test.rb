@@ -2,127 +2,103 @@
 
 require 'minitest/autorun'
 require_relative 'test_value'
-require_relative '../bowling_oo'
+require_relative '../game'
 
 # 目次
-# ①投球結果（ARGV）を投球別の数値配列に変換して出力１〜４__results_i
-# ②フレームに合うように「X」と「10フレーム追加投球」の後にdummyを追加して出力１〜３__results_s_offset
-# ③各フレームのfirst_shot数値をハッシュで返す１〜４__frame_scores
-# ④各フレームの値をハッシュで返す１〜４__frame_scores
-# ⑤各フレームのボーナスを判定できるハッシュを返す１〜４__frame_marks
+# ①フレームに合うように「X」と「10フレーム追加投球」の後にnilを追加して出力１〜３__fit_results_to_frame
+# NOTE - ①はinitializeメソッド中の`fit_results_to_frame`をコメントアウトしてから走らせる必要あり。
+# ②スペアボーナスの計算１〜４__spare_bonus
+# ③ストライクボーナスの計算１〜４__strike_bonus
+# ④トータルスコアの計算１〜４__total_score
 
 class GameTest < Minitest::Test
-  def test_①投球結果（ARGV）を投球別の数値配列に変換して出力１__results_s
+  # def test_①フレームに合うように「X」と「10フレーム追加投球」の後にnilを追加して出力１__fit_results_to_frame
+  #   argv = TestValue.argv2
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.results_offset2, game.fit_results_to_frame
+  # end
+
+  # def test_①フレームに合うように「X」と「10フレーム追加投球」の後にnilを追加して出力２__fit_results_to_frame
+  #   argv = TestValue.argv3
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.results_offset3, game.fit_results_to_frame
+  # end
+
+  # def test_①フレームに合うように「X」と「10フレーム追加投球」の後にnilを追加して出力３__fit_results_to_frame
+  #   argv = TestValue.argv4
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.results_offset4, game.fit_results_to_frame
+  # end
+
+  def test_②スペアボーナスの計算１__spare_bonus
     argv = TestValue.argv1
     game = Game.new(argv)
-    assert_equal TestValue.results_i1, game.results_i
+    assert_equal TestValue.spare_bonus1, game.spare_bonus
   end
 
-  def test_①投球結果（ARGV）を投球別の数値配列に変換して出力２__results_s
+  def test_②スペアボーナスの計算２__spare_bonus
     argv = TestValue.argv2
     game = Game.new(argv)
-    assert_equal TestValue.results_i2, game.results_i
+    assert_equal TestValue.spare_bonus2, game.spare_bonus
   end
 
-  def test_①投球結果（ARGV）を投球別の数値配列に変換して出力３__results_s
+  def test_②スペアボーナスの計算３__spare_bonus
     argv = TestValue.argv3
     game = Game.new(argv)
-    assert_equal TestValue.results_i3, game.results_i
+    assert_equal TestValue.spare_bonus3, game.spare_bonus
   end
 
-  def test_①投球結果（ARGV）を投球別の数値配列に変換して出力４__results_s
+  def test_②スペアボーナスの計算４__spare_bonus
     argv = TestValue.argv4
     game = Game.new(argv)
-    assert_equal TestValue.results_i4, game.results_i
+    assert_equal TestValue.spare_bonus4, game.spare_bonus
   end
 
-  def test_②フレームに合うように「X」と「10フレーム追加投球」の後にdummyを追加して出力１__results_s_offset
-    argv = TestValue.argv2
-    game = Game.new(argv)
-    assert_equal TestValue.results_s_offset2, game.results_s_offset
-  end
-
-  def test_②フレームに合うように「X」と「10フレーム追加投球」の後にdummyを追加して出力２__results_s_offset
-    argv = TestValue.argv3
-    game = Game.new(argv)
-    assert_equal TestValue.results_s_offset3, game.results_s_offset
-  end
-
-  def test_②フレームに合うように「X」と「10フレーム追加投球」の後にdummyを追加して出力３__results_s_offset
-    argv = TestValue.argv4
-    game = Game.new(argv)
-    assert_equal TestValue.results_s_offset4, game.results_s_offset
-  end
-
-  def test_③各フレームのfirst_shot数値をハッシュで返す１__frame_1st_shots
+  def test_③ストライクボーナスの計算１__strike_bonus
     argv = TestValue.argv1
     game = Game.new(argv)
-    assert_equal TestValue.frame_1st_shots1, game.frame_1st_shots
+    assert_equal TestValue.strike_bonus1, game.strike_bonus
   end
 
-  def test_③各フレームのfirst_shot数値をハッシュで返す２__frame_1st_shots
+  def test_③ストライクボーナスの計算２__strike_bonus
     argv = TestValue.argv2
     game = Game.new(argv)
-    assert_equal TestValue.frame_1st_shots2, game.frame_1st_shots
+    assert_equal TestValue.strike_bonus2, game.strike_bonus
   end
 
-  def test_③各フレームのfirst_shot数値をハッシュで返す３__frame_1st_shots
+  def test_③ストライクボーナスの計算３__strike_bonus
     argv = TestValue.argv3
     game = Game.new(argv)
-    assert_equal TestValue.frame_1st_shots3, game.frame_1st_shots
+    assert_equal TestValue.strike_bonus3, game.strike_bonus
   end
 
-  def test_③各フレームのfirst_shot数値をハッシュで返す４__frame_1st_shots
+  def test_③ストライクボーナスの計算４__strike_bonus
     argv = TestValue.argv4
     game = Game.new(argv)
-    assert_equal TestValue.frame_1st_shots4, game.frame_1st_shots
+    assert_equal TestValue.strike_bonus4, game.strike_bonus
   end
 
-  def test_④各フレームの値をハッシュで返す１__frame_scores
+  def test_④トータルスコアの計算１__total_score
     argv = TestValue.argv1
     game = Game.new(argv)
-    assert_equal TestValue.frame_scores1, game.frame_scores
+    assert_equal TestValue.total_score1, game.total_score
   end
 
-  def test_④各フレームの値をハッシュで返す２__frame_scores
+  def test_④トータルスコアの計算２__total_score
     argv = TestValue.argv2
     game = Game.new(argv)
-    assert_equal TestValue.frame_scores2, game.frame_scores
+    assert_equal TestValue.total_score2, game.total_score
   end
 
-  def test_④各フレームの値をハッシュで返す３__frame_scores
+  def test_④トータルスコアの計算３__total_score
     argv = TestValue.argv3
     game = Game.new(argv)
-    assert_equal TestValue.frame_scores3, game.frame_scores
+    assert_equal TestValue.total_score3, game.total_score
   end
 
-  def test_④各フレームの値をハッシュで返す４__frame_scores
+  def test_④トータルスコアの計算４__total_score
     argv = TestValue.argv4
     game = Game.new(argv)
-    assert_equal TestValue.frame_scores4, game.frame_scores
-  end
-
-  def test_⑤各フレームのボーナスを判定できるハッシュを返す１__frame_marks
-    argv = TestValue.argv1
-    game = Game.new(argv)
-    assert_equal TestValue.frame_marks1, game.frame_marks
-  end
-
-  def test_⑤各フレームのボーナスを判定できるハッシュを返す２__frame_marks
-    argv = TestValue.argv2
-    game = Game.new(argv)
-    assert_equal TestValue.frame_marks2, game.frame_marks
-  end
-
-  def test_⑤各フレームのボーナスを判定できるハッシュを返す３__frame_marks
-    argv = TestValue.argv3
-    game = Game.new(argv)
-    assert_equal TestValue.frame_marks3, game.frame_marks
-  end
-
-  def test_⑤各フレームのボーナスを判定できるハッシュを返す４__frame_marks
-    argv = TestValue.argv4
-    game = Game.new(argv)
-    assert_equal TestValue.frame_marks4, game.frame_marks
+    assert_equal TestValue.total_score4, game.total_score
   end
 end
