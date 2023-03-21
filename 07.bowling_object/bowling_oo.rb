@@ -2,11 +2,11 @@
 
 require_relative 'game'
 
-class IO
+class ScoreCalcManager
   def self.result(argv)
     game = Game.new(argv)
-    p game.total_score
+    p game.score
   end
 end
 
-__FILE__ == $PROGRAM_NAME && IO.result(ARGV)
+__FILE__ == $PROGRAM_NAME && ScoreCalcManager.result(ARGV)
