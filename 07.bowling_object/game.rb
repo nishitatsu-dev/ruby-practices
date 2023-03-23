@@ -4,8 +4,6 @@ require_relative 'bowling_oo'
 require_relative 'frame'
 
 class Game
-  # attr_reader :frames
-
   def initialize(argv)
     results = argv[0].split(',')
     results_offset = fit_results_to_frames(results)
@@ -24,8 +22,9 @@ class Game
   private
 
   def fit_results_to_frames(results)
-    results_strike_offset = insert_nil_after_strike(results)
-    insert_nil_after_extra_shot(results_strike_offset)
+    results_offset = insert_nil_after_strike(results)
+    results_offset.push(nil) if results_offset.length.odd?
+    results_offset
   end
 
   def insert_nil_after_strike(results)
@@ -37,14 +36,6 @@ class Game
       results.insert((n + 1), nil)
     end
     results
-  end
-
-  def insert_nil_after_extra_shot(results_strike_offset)
-    normal_shots = results_strike_offset.take(20)
-    extra_shots = results_strike_offset.drop(20).delete_if(&:nil?)
-    extra_shots_offset = []
-    extra_shots.each { |n| extra_shots_offset.push(n, nil) }
-    normal_shots + extra_shots_offset
   end
 
   def base_score

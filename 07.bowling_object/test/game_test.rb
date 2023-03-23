@@ -7,6 +7,7 @@ require_relative '../game'
 # 目次
 # ①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする１〜４__frames
 # NOTE - 「frameの配列」の確認を「frame.scoreの配列」で代用
+# NOTE - `attr_reader :frames`が必要
 # ②ベーススコアの計算１〜４__base_score
 # ③スペアボーナスの計算１〜４__spare_bonus
 # ④ストライクボーナスの計算１〜４__strike_bonus
@@ -14,29 +15,29 @@ require_relative '../game'
 # ⑤トータルスコアの計算１〜４__score
 
 class GameTest < Minitest::Test
-  def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする１__frames
-    argv = TestValue.argv1
-    game = Game.new(argv)
-    assert_equal TestValue.frame_scores1, game.frames.map(&:score)
-  end
+  # def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする１__frames
+  #   argv = TestValue.argv1
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.frame_scores1, game.frames.map(&:score)
+  # end
 
-  def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする２__frames
-    argv = TestValue.argv2
-    game = Game.new(argv)
-    assert_equal TestValue.frame_scores2, game.frames.map(&:score)
-  end
+  # def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする２__frames
+  #   argv = TestValue.argv2
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.frame_scores2, game.frames.map(&:score)
+  # end
 
-  def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする３__frames
-    argv = TestValue.argv3
-    game = Game.new(argv)
-    assert_equal TestValue.frame_scores3, game.frames.map(&:score)
-  end
+  # def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする３__frames
+  #   argv = TestValue.argv3
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.frame_scores3, game.frames.map(&:score)
+  # end
 
-  def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする４__frames
-    argv = TestValue.argv4
-    game = Game.new(argv)
-    assert_equal TestValue.frame_scores4, game.frames.map(&:score)
-  end
+  # def test_①投球結果（ARGV）を、『１つのゲームが持つ「frameの配列」』にする４__frames
+  #   argv = TestValue.argv4
+  #   game = Game.new(argv)
+  #   assert_equal TestValue.frame_scores4, game.frames.map(&:score)
+  # end
 
   # def test_②ベーススコアの計算１__base_score
   #   game = Game.new(TestValue.argv1)
