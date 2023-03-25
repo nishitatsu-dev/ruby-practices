@@ -10,6 +10,6 @@ class Frame
   end
 
   def score
-    @shots[0].score + @shots[1].score
+    @shots.map(&:score).sum
   end
 end
