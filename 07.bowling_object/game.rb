@@ -57,26 +57,20 @@ class Game
   end
 
   def strike_bonus
-    strike_indexes = strike_indexes_in_normal_shots_without_nil
-
-    knock_down_pins = []
-    @frames.map(&:shots).flatten.each do |n|
-      knock_down_pins << n.score unless n.mark.nil?
+    strike_frames = []
+    normal_frames = @frames.take(10)
+    normal_frames.each_with_index do |n, idx|
+      strike_frames << idx if n.shots[0].mark == 'X'
     end
 
     strike_bonus = 0
-    strike_indexes.each do |n|
-      strike_bonus += knock_down_pins[(n + 1)] + knock_down_pins[(n + 2)]
+    strike_frames.each do |n|
+      strike_bonus += if @frames[(n + 1)].shots[0].mark == 'X'
+                        @frames[(n + 1)].shots[0].score + @frames[(n + 2)].shots[0].score
+                      else
+                        @frames[(n + 1)].score
+                      end
     end
     strike_bonus
-  end
-
-  def strike_indexes_in_normal_shots_without_nil
-    strike_indexes = []
-    normal_shots = @frames.take(10).map(&:shots).flatten.map(&:mark)
-    normal_shots.delete_if(&:nil?).each_with_index do |n, idx|
-      strike_indexes << idx if n == 'X'
-    end
-    strike_indexes
   end
 end
