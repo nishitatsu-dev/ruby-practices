@@ -11,7 +11,7 @@ require_relative '../game'
 # ②ベーススコアの計算１〜４__base_score
 # ③スペアボーナスの計算１〜４__spare_bonus
 # ④ストライクボーナスの計算１〜４__strike_bonus
-# NOTE - ②〜④はprivateを外す必要あり
+# NOTE - ②〜④のメソッドをトータルスコア計算にまとめた為、テストするにはメソッド定義が必要
 # ⑤トータルスコアの計算１〜４__score
 
 class GameTest < Minitest::Test
