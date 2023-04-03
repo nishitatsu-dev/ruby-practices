@@ -5,17 +5,9 @@ require_relative 'shot'
 class Frame
   attr_reader :shots
 
-  def initialize(normal_shots, extra_shots = nil, extra: false)
-    first_shot = normal_shots.shift
-    second_shot = normal_shots.shift
+  def initialize(first_shot, second_shot, next_frame)
     @shots = [Shot.new(first_shot), Shot.new(second_shot)]
-    @extra = extra
-
-    @next_frame = if normal_shots != []
-                    Frame.new(normal_shots, extra_shots)
-                  elsif extra_shots != []
-                    Frame.new(extra_shots, [], extra: true)
-                  end
+    @next_frame = next_frame
   end
 
   def score
@@ -23,9 +15,7 @@ class Frame
   end
 
   def mark
-    if @extra == true
-      :extra
-    elsif @shots[0].mark == 'X'
+    if @shots[0].mark == 'X'
       :X
     elsif score == 10
       :spare
@@ -34,29 +24,15 @@ class Frame
     end
   end
 
-  def base_score
-    base_score = @next_frame.nil? ? 0 : @next_frame.base_score
-    base_score += score if mark != :extra
-    base_score
-  end
-
   def spare_bonus
-    spare_bonus = @next_frame.nil? ? 0 : @next_frame.spare_bonus
-    spare_bonus += @next_frame.shots[0].score if mark == :spare
-    spare_bonus
+    mark == :spare ? @next_frame.shots[0].score : 0
   end
 
   def strike_bonus
-    strike_bonus = @next_frame.nil? ? 0 : @next_frame.strike_bonus
-    strike_bonus += @next_frame.assist_calc_strike if mark == :X
-    strike_bonus
+    mark == :X ? @next_frame.assist_calc_strike : 0
   end
 
   def assist_calc_strike
-    if mark != :X
-      score
-    else
-      shots[0].score + @next_frame.shots[0].score
-    end
+    mark == :X ? shots[0].score + @next_frame.shots[0].score : score
   end
 end
