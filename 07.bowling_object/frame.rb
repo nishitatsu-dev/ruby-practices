@@ -14,25 +14,19 @@ class Frame
     @shots.map(&:score).sum
   end
 
-  def mark
-    if @shots[0].mark == 'X'
-      :X
-    elsif score == 10
-      :spare
+  def spare_bonus
+    if score == 10 && @shots[0].mark != 'X'
+      @next_frame.shots[0].score
     else
-      :none
+      0
     end
   end
 
-  def spare_bonus
-    mark == :spare ? @next_frame.shots[0].score : 0
-  end
-
   def strike_bonus
-    mark == :X ? @next_frame.assist_calc_strike : 0
+    @shots[0].mark == 'X' ? @next_frame.assist_calc_strike : 0
   end
 
   def assist_calc_strike
-    mark == :X ? shots[0].score + @next_frame.shots[0].score : score
+    @shots[0].mark == 'X' ? shots[0].score + @next_frame.shots[0].score : score
   end
 end
