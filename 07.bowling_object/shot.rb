@@ -4,7 +4,7 @@ class Shot
   attr_reader :mark, :score
 
   def initialize(shot)
-    @mark = shot
+    @mark = shot == 'X' ? :strike : nil
     @score = case shot
              when 'X'
                10

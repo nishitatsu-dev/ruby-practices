@@ -15,7 +15,7 @@ class Frame
   end
 
   def spare_bonus
-    if score == 10 && @shots[0].mark != 'X'
+    if score == 10 && @shots[0].mark.nil?
       @next_frame.shots[0].score
     else
       0
@@ -23,10 +23,10 @@ class Frame
   end
 
   def strike_bonus
-    @shots[0].mark == 'X' ? @next_frame.assist_calc_strike : 0
+    @shots[0].mark ? @next_frame.assist_calc_strike : 0
   end
 
   def assist_calc_strike
-    @shots[0].mark == 'X' ? shots[0].score + @next_frame.shots[0].score : score
+    @shots[0].mark ? shots[0].score + @next_frame.shots[0].score : score
   end
 end

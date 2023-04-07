@@ -5,20 +5,20 @@ require_relative 'test_value'
 require_relative '../shot'
 
 # 目次
-# ①1投分の結果を、文字列またはnilのまま出力（ボーナス判定用）１〜２__mark
+# ①1投分の結果が、ストライクならtrue、それ以外はfalseを出力（ストライクボーナス判定用）１〜２__mark
 # ②1投分の結果を、全て数値に変換して出力（計算用）１〜３__score
 
 class ShotTest < Minitest::Test
-  def test_①1投分の結果を、文字列またはnilのまま出力（ボーナス判定用）１__mark
-    shot1 = '1'
+  def test_①1投分の結果が、ストライクならtrue、それ以外はfalseを出力（ストライクボーナス判定用）１__mark
+    shot1 = 'X'
     shot = Shot.new(shot1)
-    assert_equal '1', shot.mark
+    assert_equal true, shot.mark
   end
 
-  def test_①1投分の結果を、文字列またはnilのまま出力（ボーナス判定用）２__mark
+  def test_①1投分の結果が、ストライクならtrue、それ以外はfalseを出力（ストライクボーナス判定用）２__mark
     shot1 = nil
     shot = Shot.new(shot1)
-    assert_nil shot.mark
+    assert_equal false, shot.mark
   end
 
   def test_②1投分の結果を、全て数値に変換して出力（計算用）１__score
