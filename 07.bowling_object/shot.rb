@@ -4,13 +4,6 @@ class Shot
   attr_reader :score
 
   def initialize(shot)
-    @score = case shot
-             when 'X'
-               10
-             when nil
-               0
-             else
-               shot.to_i
-             end
+    @score = shot == 'X' ? 10 : shot.to_i
   end
 end
