@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class Shot
-  attr_reader :mark, :score
+  attr_reader :score
 
   def initialize(shot)
-    @mark = shot == 'X' ? :strike : nil
     @score = case shot
              when 'X'
                10
