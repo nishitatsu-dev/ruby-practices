@@ -1,3 +1,10 @@
 inherit_gem:
   rubocop-fjord:
     - "config/rubocop.yml"
+
+AllCops:
+  Exclude:
+    - "07.bowling_object/test/ver1*"
+Naming:
+  Exclude:
+    - "07.bowling_object/test/*"
