@@ -7,11 +7,11 @@ require_relative '../form_opt_l'
 #  オプション「l」有りの出力値__initialize
 # NOTE - 今回test_sampleフォルダはアップロードしていない
 
-class FormOptLTest < Minitest::Test
+class FormOptionLongTest < Minitest::Test
   # def test_オプション「l」有りの出力値__initialize
   #   Dir.chdir('./test/test_sample')
   #   files = Dir.glob('*')
-  #   form_opt_l = FormOptL.new(files)
+  #   form_opt_l = FormOptionLong.new(files)
   #   expected = ['total 8',
   #               'drwxr-xr-x 2 tatsu  staff  64  4 17 10:28 sample_dir',
   #               '-rw-r--r-- 1 tatsu  staff  91  4 17 10:57 sample_file.md',

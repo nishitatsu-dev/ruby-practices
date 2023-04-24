@@ -5,8 +5,8 @@ require 'etc'
 require_relative 'list_provider'
 require_relative 'display_formatter'
 
-class LSManager
-  def self.run_ls(argv, options)
+class LS
+  def self.run(argv, options)
     files = ListProvider.new(argv[0], options).files
     form = DisplayFormatter.new(files, options)
     form.lines.each { |n| puts n }
@@ -21,5 +21,5 @@ if __FILE__ == $PROGRAM_NAME
     opt.on('-l', '詳細情報を表示') { |x| options[:l] = x }
     opt.parse!(ARGV)
   end
-  LSManager.run_ls(ARGV, options)
+  LS.run(ARGV, options)
 end

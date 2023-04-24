@@ -7,7 +7,7 @@ class DisplayFormatter
   attr_reader :lines
 
   def initialize(files, options)
-    form = options[:l] ? FormOptL.new(files) : FormNormal.new(files)
+    form = options[:l] ? FormOptionLong.new(files) : FormNormal.new(files)
     @lines = form.lines
   end
 end
