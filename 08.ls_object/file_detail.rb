@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class FileDetails
-  attr_reader :details
+class FileDetail
+  attr_reader :type, :permission, :link, :user, :group, :size, :month, :day, :time, :name, :block
 
   FILE_MODE = { '7' => 'rwx',
                 '6' => 'rw-',
@@ -14,18 +14,17 @@ class FileDetails
 
   def initialize(file)
     state = File.lstat(file)
-    @details = {}
-    @details[:type] = (state.ftype[0] == 'f' ? '-' : state.ftype[0])
-    @details[:permission] = build_permission_with_stickybit(state)
-    @details[:link] = state.nlink.to_s
-    @details[:user] = Etc.getpwuid(state.uid).name
-    @details[:group] = Etc.getgrgid(state.gid).name
-    @details[:size] = state.size.to_s
-    @details[:month] = state.mtime.month.to_s
-    @details[:day] = state.mtime.day.to_s
-    @details[:time] = state.mtime.strftime('%R')
-    @details[:name] = (state.symlink? ? " #{file} -> #{File.readlink(file)}" : " #{file}")
-    @details[:block] = state.blocks
+    @type = (state.ftype[0] == 'f' ? '-' : state.ftype[0])
+    @permission = build_permission_with_stickybit(state)
+    @link = state.nlink.to_s
+    @user = Etc.getpwuid(state.uid).name
+    @group = Etc.getgrgid(state.gid).name
+    @size = state.size.to_s
+    @month = state.mtime.month.to_s
+    @day = state.mtime.day.to_s
+    @time = state.mtime.strftime('%R')
+    @name = (state.symlink? ? " #{file} -> #{File.readlink(file)}" : " #{file}")
+    @block = state.blocks
   end
 
   private

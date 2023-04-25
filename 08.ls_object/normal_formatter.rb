@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FormNormal
+class NormalFormatter
   attr_reader :lines
 
   LINE = 3

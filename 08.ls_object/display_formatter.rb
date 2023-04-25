@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'form_normal'
-require_relative 'form_opt_l'
+require_relative 'normal_formatter'
+require_relative 'option_long_formatter'
 
 class DisplayFormatter
   attr_reader :lines
 
   def initialize(files, options)
-    form = options[:l] ? FormOptionLong.new(files) : FormNormal.new(files)
+    form = options[:l] ? OptionLongFormatter.new(files) : NormalFormatter.new(files)
     @lines = form.lines
   end
 end
