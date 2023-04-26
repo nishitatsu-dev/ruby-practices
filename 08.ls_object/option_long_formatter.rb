@@ -3,19 +3,17 @@
 require_relative 'file_detail'
 
 class OptionLongFormatter
-  attr_reader :lines
-
   def initialize(files)
+    @files = files
+  end
+
+  def lines
     files_with_detail = []
-    files.each do |file|
+    @files.each do |file|
       files_with_detail << FileDetail.new(file)
     end
-
-    @lines = []
-    @block = 0
     calc_text_field_width(files_with_detail)
     make_long_format_lines(files_with_detail)
-    @lines.unshift("total #{@block}")
   end
 
   private
@@ -36,6 +34,8 @@ class OptionLongFormatter
   end
 
   def make_long_format_lines(files_with_detail)
+    lines = []
+    block = 0
     files_with_detail.each do |n|
       type = n.type
       permission = n.permission
@@ -47,8 +47,9 @@ class OptionLongFormatter
       day = n.day.rjust(3)
       time = n.time.rjust(6)
       name = n.name
-      @lines << type + permission + link + user + group + size + month + day + time + name
-      @block += n.block
+      lines << type + permission + link + user + group + size + month + day + time + name
+      block += n.block
     end
+    lines.unshift("total #{block}")
   end
 end
