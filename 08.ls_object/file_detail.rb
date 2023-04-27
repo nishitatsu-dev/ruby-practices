@@ -60,7 +60,7 @@ class FileDetail
   end
 
   def name
-    @state.symlink? ? " #{@file} -> #{File.readlink(@file)}" : " #{@file}"
+    @state.symlink? ? "#{@file} -> #{File.readlink(@file)}" : @file.to_s
   end
 
   def block

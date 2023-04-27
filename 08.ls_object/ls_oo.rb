@@ -3,13 +3,14 @@
 require 'optparse'
 require 'etc'
 require_relative 'list_provider'
-require_relative 'display_formatter'
+require_relative 'normal_formatter'
+require_relative 'option_long_formatter'
 
 class LS
   def self.run(argv, options)
     files = ListProvider.new(argv[0], options).files
-    form = DisplayFormatter.new(files, options)
-    form.lines.each { |n| puts n }
+    formatter = options[:l] ? OptionLongFormatter.new(files) : NormalFormatter.new(files)
+    formatter.lines.each { |n| puts n }
   end
 end
 

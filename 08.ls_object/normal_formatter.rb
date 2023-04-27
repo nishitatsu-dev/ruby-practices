@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
 class NormalFormatter
-  attr_reader :lines
-
   LINE = 3
   def initialize(files)
     @files = files
   end
-  
+
   def lines
     residue = @files.size % LINE
     number_of_dummy = residue.zero? ? 0 : LINE - residue
