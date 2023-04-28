@@ -9,3 +9,4 @@ Naming:
   Exclude:
     - "07.bowling_object/test/*"
     - "08.ls_object/test/*"
+    - "08.ls_object/test/exclude/*"
